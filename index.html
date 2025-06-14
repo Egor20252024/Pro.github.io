@@ -3,943 +3,478 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRO - Поисковая система</title>
+    <title>МОЙ САЙТ</title>
     <style>
         :root {
-            --primary: #6e48aa;
-            --secondary: #9d50bb;
-            --accent: #4776e6;
-            --text: #333;
-            --light: #f8f9fa;
-            --dark-bg: #121212;
-            --dark-text: #e0e0e0;
-            --dark-card: #1e1e1e;
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --primary-color: #4285f4;
+            --secondary-color: #34a853;
+            --search-bg: #fff;
+            --search-border: #dfe1e5;
+            --button-bg: #f8f9fa;
+            --button-hover: #f1f3f4;
+            --settings-bg: #fff;
+            --settings-shadow: rgba(0, 0, 0, 0.1);
         }
-        
-        * {
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --primary-color: #8ab4f8;
+            --secondary-color: #81c995;
+            --search-bg: #333;
+            --search-border: #5f6368;
+            --button-bg: #424242;
+            --button-hover: #616161;
+            --settings-bg: #424242;
+            --settings-shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
             transition: background-color 0.3s, color 0.3s;
         }
-        
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            color: var(--text);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        body.dark-mode {
-            background: var(--dark-bg);
-            color: var(--dark-text);
-        }
-        
+
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 500px;
             padding: 20px;
-            flex: 1;
-            position: relative;
-        }
-        
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            margin-bottom: 20px;
-        }
-        
-        .logo {
-            font-size: 42px;
-            font-weight: 800;
-            background: linear-gradient(45deg, #ff3366, #ba265d, #6e48aa, #4776e6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-sizing: border-box;
             text-align: center;
-            flex-grow: 1;
         }
-        
-        .settings-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text);
-            padding: 5px;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .settings-btn:hover {
-            background: rgba(0,0,0,0.1);
-        }
-        
-        .dark-mode .settings-btn {
-            color: var(--dark-text);
-        }
-        
-        .dark-mode .settings-btn:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .search-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        
+
         .time-display {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--text);
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary-color);
         }
-        
-        .dark-mode .time-display {
-            color: var(--dark-text);
+
+        .date-display {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--secondary-color);
         }
-        
-        .search-box-wrapper {
-            display: flex;
-            width: 100%;
-            max-width: 1200px;
-            gap: 20px;
+
+        .site-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 30px 0;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
-        
-        .sidebar {
-            width: 300px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .widget {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            overflow: hidden;
-            height: 400px;
-        }
-        
-        .dark-mode .widget {
-            background: var(--dark-card);
-        }
-        
-        .widget iframe {
-            width: 100%;
-            height: calc(100% - 42px);
-            border: none;
-        }
-        
-        .widget-title {
-            padding: 12px 15px;
-            font-weight: 600;
-            background: rgba(0,0,0,0.03);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        
-        .dark-mode .widget-title {
-            background: rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            color: var(--dark-text);
-        }
-        
-        .search-box {
-            width: 100%;
-            max-width: 600px;
+
+        .search-container {
             position: relative;
-            margin-bottom: 20px;
+            width: 100%;
+            margin: 20px 0;
         }
-        
+
         .search-input {
             width: 100%;
-            padding: 15px 20px;
+            padding: 15px 50px 15px 20px;
             border-radius: 30px;
-            border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            font-size: 16px;
+            border: 1px solid var(--search-border);
+            background-color: var(--search-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
             outline: none;
-            background: white;
-            color: var(--text);
+            transition: all 0.3s;
         }
-        
-        .dark-mode .search-input {
-            background: var(--dark-card);
-            color: var(--dark-text);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+
+        .search-input:focus {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
-        
-        .search-history {
+
+        .search-button {
             position: absolute;
-            width: 100%;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            top: 100%;
-            margin-top: 5px;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .settings-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-color);
+            font-size: 1.5rem;
             z-index: 100;
-            max-height: 300px;
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 350px;
+            height: 100%;
+            background-color: var(--settings-bg);
+            box-shadow: -2px 0 10px var(--settings-shadow);
+            padding: 20px;
+            box-sizing: border-box;
+            transition: right 0.3s;
+            z-index: 99;
             overflow-y: auto;
-            display: none;
         }
-        
-        .dark-mode .search-history {
-            background: var(--dark-card);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+
+        .settings-panel.active {
+            right: 0;
         }
-        
-        .history-item {
-            padding: 12px 20px;
-            cursor: pointer;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        
-        .dark-mode .history-item {
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .history-item:hover {
-            background: rgba(0,0,0,0.03);
-        }
-        
-        .dark-mode .history-item:hover {
-            background: rgba(255,255,255,0.05);
-        }
-        
-        .clear-history {
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .dark-mode .clear-history {
-            color: #999;
-        }
-        
-        .clear-history:hover {
-            color: #333;
-        }
-        
-        .dark-mode .clear-history:hover {
-            color: #ccc;
-        }
-        
-        .search-btn {
-            padding: 12px 30px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(110, 72, 170, 0.3);
-            transition: all 0.3s ease;
-            margin-top: 15px;
-        }
-        
-        .search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(110, 72, 170, 0.4);
-        }
-        
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .action-btn {
-            padding: 12px 25px;
-            background: white;
-            border-radius: 25px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .dark-mode .action-btn {
-            background: var(--dark-card);
-            color: var(--dark-text);
-        }
-        
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-        }
-        
-        .social-buttons {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            margin-top: 30px;
-            width: 100%;
-            max-width: 900px;
-        }
-        
-        .social-btn {
-            padding: 15px;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            height: 100px;
-            background: white;
-        }
-        
-        .dark-mode .social-btn {
-            background: var(--dark-card);
-            color: var(--dark-text);
-        }
-        
-        .social-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-        }
-        
-        .social-icon {
-            font-size: 24px;
-        }
-        
-        footer {
-            background: rgba(255,255,255,0.8);
-            padding: 15px 0;
-            text-align: center;
-            margin-top: auto;
-        }
-        
-        .dark-mode footer {
-            background: rgba(30,30,30,0.8);
-        }
-        
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+
+        .settings-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        
-        .copyright {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .dark-mode .copyright {
-            color: #999;
-        }
-        
-        .version {
-            font-size: 12px;
-            color: #999;
-        }
-        
-        .dark-mode .version {
-            color: #777;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 400px;
-            width: 90%;
-            position: relative;
-            text-align: center;
-        }
-        
-        .dark-mode .modal-content {
-            background-color: var(--dark-card);
-            color: var(--dark-text);
-        }
-        
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-        }
-        
-        .dark-mode .close-btn {
-            color: #999;
-        }
-        
-        .close-btn:hover {
-            color: #333;
-        }
-        
-        .dark-mode .close-btn:hover {
-            color: #ccc;
-        }
-        
-        .settings-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .settings-content {
-            background-color: white;
-            padding: 25px;
-            border-radius: 15px;
-            max-width: 350px;
-            width: 90%;
-            position: relative;
-        }
-        
-        .dark-mode .settings-content {
-            background-color: var(--dark-card);
-            color: var(--dark-text);
-        }
-        
-        .settings-title {
-            font-size: 20px;
             margin-bottom: 20px;
-            text-align: center;
         }
-        
-        .setting-option {
-            margin-bottom: 15px;
+
+        .settings-title {
+            font-size: 1.5rem;
+            font-weight: bold;
         }
-        
-        .setting-label {
+
+        .close-settings {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .settings-section {
+            margin-bottom: 20px;
+        }
+
+        .settings-label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 500;
+            font-weight: bold;
         }
-        
-        .setting-select {
+
+        .settings-option {
+            margin-bottom: 15px;
+        }
+
+        select, input {
             width: 100%;
             padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            background: white;
+            border-radius: 5px;
+            border: 1px solid var(--search-border);
+            background-color: var(--search-bg);
+            color: var(--text-color);
+            margin-bottom: 10px;
         }
-        
-        .dark-mode .setting-select {
-            background: var(--dark-card);
-            color: var(--dark-text);
-            border-color: #444;
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
         }
-        
-        .theme-toggle {
+
+        .radio-option {
             display: flex;
             align-items: center;
-            justify-content: space-between;
         }
-        
-        .theme-btn {
-            padding: 8px 15px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            background: #f0f0f0;
+
+        .radio-option input {
+            width: auto;
+            margin-right: 5px;
         }
-        
-        .dark-mode .theme-btn {
-            background: #333;
-            color: var(--dark-text);
-        }
-        
-        .theme-btn.active {
-            background: var(--primary);
+
+        .save-button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
             color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
         }
-        
-        @media (max-width: 1200px) {
-            .search-box-wrapper {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-                width: 100%;
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-            
-            .widget {
-                width: calc(50% - 10px);
-            }
-            
-            .social-buttons {
-                grid-template-columns: repeat(3, 1fr);
-            }
+
+        .save-button:hover {
+            background-color: var(--secondary-color);
         }
-        
-        @media (max-width: 768px) {
-            .widget {
-                width: 100%;
-            }
-            
-            .social-buttons {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 15px;
-            }
+
+        .search-results {
+            width: 100%;
+            height: 400px;
+            border: 1px solid var(--search-border);
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
         }
-        
-        @media (max-width: 480px) {
-            .social-buttons {
-                grid-template-columns: 1fr;
-            }
-            
-            .action-buttons, .bottom-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">PRO</div>
-            <button class="settings-btn" onclick="openSettings()">
-                <i class="fas fa-cog"></i>
-            </button>
+    <button class="settings-button">⚙️</button>
+    
+    <div class="settings-panel">
+        <div class="settings-header">
+            <div class="settings-title">Настройки</div>
+            <button class="close-settings">×</button>
         </div>
         
-        <div class="search-container">
-            <div class="time-display" id="timeDisplay"></div>
-            
-            <div class="search-box-wrapper">
-                <div class="sidebar">
-                    <div class="widget">
-                        <div class="widget-title">Калькулятор</div>
-                        <iframe src="https://www.mathway.com/ru/Algebra" frameborder="0"></iframe>
+        <div class="settings-section">
+            <div class="settings-label">Тема</div>
+            <div class="settings-option">
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="light-theme" name="theme" value="light" checked>
+                        <label for="light-theme">Светлая</label>
                     </div>
-                </div>
-                
-                <div class="main-content">
-                    <div class="search-box">
-                        <input type="text" class="search-input" placeholder="Найти в PRO..." id="searchQuery" autocomplete="off">
-                        <div class="search-history" id="searchHistory">
-                            <div class="history-items" id="historyItems"></div>
-                            <div class="clear-history" onclick="clearSearchHistory()">Очистить историю</div>
-                        </div>
-                    </div>
-                    <button class="search-btn" id="searchButton">Найти</button>
-                    
-                    <div class="action-buttons">
-                        <button class="action-btn" id="goBtn">
-                            <i class="fas fa-car"></i> Поехали?
-                        </button>
-                        <button class="action-btn" id="gamesBtn">
-                            <i class="fas fa-gamepad"></i> Игры
-                        </button>
-                        <button class="action-btn" id="helpBtn">
-                            <i class="fas fa-question-circle"></i> Помощь и отзывы
-                        </button>
-                    </div>
-                    
-                    <div class="social-buttons">
-                        <button class="social-btn" id="youtubeBtn">
-                            <i class="fab fa-youtube social-icon"></i>
-                            <span>YouTube</span>
-                        </button>
-                        <button class="social-btn" id="telegramBtn">
-                            <i class="fab fa-telegram social-icon"></i>
-                            <span>Telegram</span>
-                        </button>
-                        <button class="social-btn" id="whatsappBtn">
-                            <i class="fab fa-whatsapp social-icon"></i>
-                            <span>WhatsApp</span>
-                        </button>
-                        <button class="social-btn" id="yandexBtn">
-                            <i class="fab fa-yandex social-icon"></i>
-                            <span>Яндекс</span>
-                        </button>
-                        <button class="social-btn" id="googleBtn">
-                            <i class="fab fa-google social-icon"></i>
-                            <span>Google</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="sidebar">
-                    <div class="widget">
-                        <div class="widget-title">Новости</div>
-                        <iframe src="https://vesti365.ru/news-365-vidjet/" frameborder="0"></iframe>
+                    <div class="radio-option">
+                        <input type="radio" id="dark-theme" name="theme" value="dark">
+                        <label for="dark-theme">Тёмная</label>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Модальные окна -->
-    <div class="modal" id="goModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('goModal')">&times;</span>
-            <h2>Поехали?</h2>
-            <p>Доступно скоро</p>
+        
+        <div class="settings-section">
+            <div class="settings-label">Дата и время</div>
+            <div class="settings-option">
+                <label for="custom-date">Изменить дату:</label>
+                <input type="date" id="custom-date">
+                
+                <label for="custom-time">Изменить время:</label>
+                <input type="time" id="custom-time">
+                
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="12-hour" name="time-format" value="12">
+                        <label for="12-hour">12-часовой формат</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="24-hour" name="time-format" value="24" checked>
+                        <label for="24-hour">24-часовой формат</label>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-
-    <div class="modal" id="gamesModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('gamesModal')">&times;</span>
-            <h2>Игры</h2>
-            <p>Доступно скоро</p>
-        </div>
-    </div>
-
-    <div class="modal" id="helpModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('helpModal')">&times;</span>
-            <h2>Помощь и отзывы</h2>
-            <p>Доступно скоро</p>
-        </div>
-    </div>
-
-    <div class="modal" id="youtubeModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('youtubeModal')">&times;</span>
-            <h2>YouTube</h2>
-            <p>Доступно скоро</p>
-        </div>
-    </div>
-
-    <div class="modal" id="telegramModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('telegramModal')">&times;</span>
-            <h2>Telegram</h2>
-            <p>Доступно скоро</p>
-        </div>
-    </div>
-
-    <div class="modal" id="whatsappModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('whatsappModal')">&times;</span>
-            <h2>WhatsApp</h2>
-            <p>Доступно скоро</p>
-        </div>
-    </div>
-
-    <div class="modal" id="yandexModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('yandexModal')">&times;</span>
-            <h2>Яндекс</h2>
-            <p>Доступно скоро</p>
-        </div>
-    </div>
-
-    <div class="modal" id="googleModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('googleModal')">&times;</span>
-            <h2>Google</h2>
-            <p>Доступно скоро</p>
-        </div>
-    </div>
-
-    <!-- Настройки -->
-    <div class="settings-modal" id="settingsModal">
-        <div class="settings-content">
-            <span class="close-btn" onclick="closeModal('settingsModal')">&times;</span>
-            <h2 class="settings-title">Настройки</h2>
-            
-            <div class="setting-option">
-                <label class="setting-label">Язык:</label>
-                <select class="setting-select" id="languageSelect">
+        
+        <div class="settings-section">
+            <div class="settings-label">Язык</div>
+            <div class="settings-option">
+                <select id="language-select">
                     <option value="ru">Русский</option>
                     <option value="en">English</option>
                     <option value="de">Deutsch</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Español</option>
+                    <option value="it">Italiano</option>
+                    <option value="pt">Português</option>
+                    <option value="tr">Türkçe</option>
                 </select>
             </div>
-            
-            <div class="setting-option">
-                <label class="setting-label">Тема:</label>
-                <div class="theme-toggle">
-                    <button class="theme-btn active" id="lightThemeBtn">Светлая</button>
-                    <button class="theme-btn" id="darkThemeBtn">Тёмная</button>
-                </div>
-            </div>
-            
-            <div class="setting-option">
-                <label class="setting-label">Формат времени:</label>
-                <select class="setting-select" id="timeFormatSelect">
-                    <option value="24">24-часовой</option>
-                    <option value="12">12-часовой</option>
-                </select>
-            </div>
+        </div>
+        
+        <button class="save-button">Сохранить</button>
+    </div>
+    
+    <div class="container">
+        <div class="time-display" id="time">00:00:00</div>
+        <div class="date-display" id="date">1 января 2023</div>
+        
+        <div class="site-title">МОЙ САЙТ</div>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" id="search-input" placeholder="Поиск...">
+            <button class="search-button" id="search-button">🔍</button>
+        </div>
+        
+        <div class="search-results" id="search-results">
+            <iframe id="search-iframe"></iframe>
         </div>
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <div class="copyright">Все права защищены. PRO 2025</div>
-            <div class="version">v 0.3.0.5</div>
-        </div>
-    </footer>
-
     <script>
-        // Поиск через Яндекс
-        function searchYandex(query) {
-            if(query.trim() !== '') {
-                // Сохраняем запрос в историю
-                saveToSearchHistory(query);
-                // Открываем поиск в новой вкладке
-                window.open(`https://yandex.ru/search/?text=${encodeURIComponent(query)}`, '_blank');
+        // Элементы DOM
+        const timeDisplay = document.getElementById('time');
+        const dateDisplay = document.getElementById('date');
+        const settingsButton = document.querySelector('.settings-button');
+        const settingsPanel = document.querySelector('.settings-panel');
+        const closeSettings = document.querySelector('.close-settings');
+        const saveButton = document.querySelector('.save-button');
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const searchResults = document.getElementById('search-results');
+        const searchIframe = document.getElementById('search-iframe');
+        
+        // Настройки по умолчанию
+        let settings = {
+            theme: 'light',
+            timeFormat: '24',
+            language: 'ru',
+            useCustomDateTime: false,
+            customDate: null,
+            customTime: null
+        };
+        
+        // Загрузка сохраненных настроек
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('siteSettings');
+            if (savedSettings) {
+                settings = JSON.parse(savedSettings);
+                applySettings();
             }
         }
         
-        // История поиска
-        function saveToSearchHistory(query) {
-            let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-            if (!history.includes(query)) {
-                history.unshift(query);
-                if (history.length > 10) {
-                    history = history.slice(0, 10);
-                }
-                localStorage.setItem('searchHistory', JSON.stringify(history));
-                updateSearchHistoryDisplay();
-            }
+        // Сохранение настроек
+        function saveSettings() {
+            localStorage.setItem('siteSettings', JSON.stringify(settings));
+            applySettings();
+            settingsPanel.classList.remove('active');
         }
         
-        function updateSearchHistoryDisplay() {
-            const history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-            const historyItems = document.getElementById('historyItems');
-            historyItems.innerHTML = '';
-            
-            history.forEach(item => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                historyItem.textContent = item;
-                historyItem.onclick = function() {
-                    document.getElementById('searchQuery').value = item;
-                    searchYandex(item);
-                    hideSearchHistory();
-                };
-                historyItems.appendChild(historyItem);
-            });
-        }
-        
-        function clearSearchHistory() {
-            localStorage.removeItem('searchHistory');
-            updateSearchHistoryDisplay();
-        }
-        
-        function showSearchHistory() {
-            updateSearchHistoryDisplay();
-            document.getElementById('searchHistory').style.display = 'block';
-        }
-        
-        function hideSearchHistory() {
-            document.getElementById('searchHistory').style.display = 'none';
-        }
-        
-        // Время
-        function updateTime() {
-            const timeDisplay = document.getElementById('timeDisplay');
-            const now = new Date();
-            const timeFormat = document.getElementById('timeFormatSelect').value;
-            
-            let hours = now.getHours();
-            let minutes = now.getMinutes();
-            let seconds = now.getSeconds();
-            
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            seconds = seconds < 10 ? '0' + seconds : seconds;
-            
-            if (timeFormat === '12') {
-                const ampm = hours >= 12 ? 'PM' : 'AM';
-                hours = hours % 12;
-                hours = hours ? hours : 12; // 0 часов = 12 AM
-                timeDisplay.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
-            } else {
-                hours = hours < 10 ? '0' + hours : hours;
-                timeDisplay.textContent = `${hours}:${minutes}:${seconds}`;
-            }
-        }
-        
-        // Тема
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        }
-        
-        function setTheme(isDark) {
-            if (isDark) {
+        // Применение настроек
+        function applySettings() {
+            // Тема
+            if (settings.theme === 'dark') {
                 document.body.classList.add('dark-mode');
-                document.getElementById('darkThemeBtn').classList.add('active');
-                document.getElementById('lightThemeBtn').classList.remove('active');
+                document.getElementById('dark-theme').checked = true;
             } else {
                 document.body.classList.remove('dark-mode');
-                document.getElementById('lightThemeBtn').classList.add('active');
-                document.getElementById('darkThemeBtn').classList.remove('active');
+                document.getElementById('light-theme').checked = true;
+            }
+            
+            // Формат времени
+            if (settings.timeFormat === '12') {
+                document.getElementById('12-hour').checked = true;
+            } else {
+                document.getElementById('24-hour').checked = true;
+            }
+            
+            // Язык
+            document.getElementById('language-select').value = settings.language;
+            
+            // Пользовательские дата и время
+            if (settings.customDate) {
+                document.getElementById('custom-date').value = settings.customDate;
+            }
+            if (settings.customTime) {
+                document.getElementById('custom-time').value = settings.customTime;
             }
         }
         
-        // Модальные окна
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
+        // Обновление времени и даты
+        function updateDateTime() {
+            let now;
+            
+            if (settings.useCustomDateTime && settings.customDate && settings.customTime) {
+                const [hours, minutes] = settings.customTime.split(':');
+                now = new Date(settings.customDate);
+                now.setHours(parseInt(hours), parseInt(minutes), now.getSeconds());
+            } else {
+                now = new Date();
+            }
+            
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            let timeString;
+            if (settings.timeFormat === '12') {
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // 0 часов становится 12
+                timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            } else {
+                timeString = `${hours.toString().padStart(2, '0')}:${minutes}:${seconds}`;
+            }
+            
+            timeDisplay.textContent = timeString;
+            
+            // Форматирование даты
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const locale = settings.language === 'ru' ? 'ru-RU' : settings.language + '-US';
+            dateDisplay.textContent = now.toLocaleDateString(locale, options);
         }
         
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-        
-        function openSettings() {
-            openModal('settingsModal');
+        // Поиск
+        function performSearch() {
+            const query = searchInput.value.trim();
+            if (query) {
+                searchResults.style.display = 'block';
+                searchIframe.src = `https://ya.ru/search/?text=${encodeURIComponent(query)}`;
+            }
         }
         
         // Инициализация
-        document.addEventListener('DOMContentLoaded', function() {
-            // История поиска
-            updateSearchHistoryDisplay();
+        function init() {
+            loadSettings();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
             
-            // Обработчики поиска
-            document.getElementById('searchButton').addEventListener('click', function() {
-                const query = document.getElementById('searchQuery').value;
-                searchYandex(query);
+            // Открытие/закрытие настроек
+            settingsButton.addEventListener('click', () => {
+                settingsPanel.classList.add('active');
             });
             
-            document.getElementById('searchQuery').addEventListener('keypress', function(e) {
-                if(e.key === 'Enter') {
-                    const query = document.getElementById('searchQuery').value;
-                    searchYandex(query);
+            closeSettings.addEventListener('click', () => {
+                settingsPanel.classList.remove('active');
+            });
+            
+            // Сохранение настроек
+            saveButton.addEventListener('click', () => {
+                settings.theme = document.querySelector('input[name="theme"]:checked').value;
+                settings.timeFormat = document.querySelector('input[name="time-format"]:checked').value;
+                settings.language = document.getElementById('language-select').value;
+                
+                const customDate = document.getElementById('custom-date').value;
+                const customTime = document.getElementById('custom-time').value;
+                
+                if (customDate && customTime) {
+                    settings.useCustomDateTime = true;
+                    settings.customDate = customDate;
+                    settings.customTime = customTime;
+                } else {
+                    settings.useCustomDateTime = false;
+                }
+                
+                saveSettings();
+            });
+            
+            // Поиск
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
                 }
             });
-            
-            document.getElementById('searchQuery').addEventListener('focus', showSearchHistory);
-            document.getElementById('searchQuery').addEventListener('blur', function() {
-                setTimeout(hideSearchHistory, 200);
-            });
-            
-            // Время
-            updateTime();
-            setInterval(updateTime, 1000);
-            
-            // Тема
-            const darkMode = localStorage.getItem('darkMode') === 'true';
-            setTheme(darkMode);
-            
-            document.getElementById('lightThemeBtn').addEventListener('click', function() {
-                setTheme(false);
-            });
-            
-            document.getElementById('darkThemeBtn').addEventListener('click', function() {
-                setTheme(true);
-            });
-            
-            // Формат времени
-            const timeFormat = localStorage.getItem('timeFormat') || '24';
-            document.getElementById('timeFormatSelect').value = timeFormat;
-            
-            document.getElementById('timeFormatSelect').addEventListener('change', function() {
-                localStorage.setItem('timeFormat', this.value);
-                updateTime();
-            });
-            
-            // Язык
-            const language = localStorage.getItem('language') || 'ru';
-            document.getElementById('languageSelect').value = language;
-            
-            document.getElementById('languageSelect').addEventListener('change', function() {
-                localStorage.setItem('language', this.value);
-                // Здесь можно добавить смену языка на странице
-            });
-            
-            // Обработчики кнопок
-            document.getElementById('goBtn').addEventListener('click', function() {
-                openModal('goModal');
-            });
-            
-            document.getElementById('gamesBtn').addEventListener('click', function() {
-                openModal('gamesModal');
-            });
-            
-            document.getElementById('helpBtn').addEventListener('click', function() {
-                openModal('helpModal');
-            });
-            
-            document.getElementById('youtubeBtn').addEventListener('click', function() {
-                openModal('youtubeModal');
-            });
-            
-            document.getElementById('telegramBtn').addEventListener('click', function() {
-                openModal('telegramModal');
-            });
-            
-            document.getElementById('whatsappBtn').addEventListener('click', function() {
-                openModal('whatsappModal');
-            });
-            
-            document.getElementById('yandexBtn').addEventListener('click', function() {
-                openModal('yandexModal');
-            });
-            
-            document.getElementById('googleBtn').addEventListener('click', function() {
-                openModal('googleModal');
-            });
-            
-            // Закрытие модальных окон при клике вне их
-            window.addEventListener('click', function(event) {
-                if (event.target.className === 'modal' || event.target.className === 'settings-modal') {
-                    event.target.style.display = 'none';
-                }
-            });
-        });
+        }
+        
+        // Запуск приложения
+        init();
     </script>
 </body>
 </html>
